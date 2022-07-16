@@ -302,7 +302,7 @@
       <Path>LiveSplit.ScriptableAutoSplit.dll</Path>
       <Settings>
         <Version>1.5</Version>
-        <ScriptPath>E:\LiveSplit\Games\Ghost Babel\GB.asl</ScriptPath>
+        <ScriptPath</ScriptPath>
         <Start>True</Start>
         <Reset>True</Reset>
         <Split>True</Split>
