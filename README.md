@@ -18,4 +18,4 @@ Autosplitter, layout and splits for speedrunning Metal Gear: Ghost Babel (aka Me
 - VAR view of current Rank depending on above variables
 - Other requests from the GB community
 
-#### If you find any errors, please either submit a Issue request, or leave a message in the #ghost-babel channel of the Metal Gear Speedrunners Discord
+#### If you find any errors, please either submit a New Issue, or leave a message in the #ghost-babel channel of the Metal Gear Speedrunners Discord
