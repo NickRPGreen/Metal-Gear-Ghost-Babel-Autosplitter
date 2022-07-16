@@ -1,5 +1,5 @@
-# Metal-Gear-Ghost-Babel-Autosplitter
-Autosplitter, layout and splits for running Metal Gear: Ghost Babel (aka Metal Gear Solid Gameboy) on emulator
+# Metal Gear: Ghost Babel Autosplitter
+Autosplitter, layout and splits for speedrunning Metal Gear: Ghost Babel (aka Metal Gear Solid Gameboy) on emulator
 
 ## Current Features
 - Works on bgb.exe for the US, JP and EU versions of the game
