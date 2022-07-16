@@ -14,7 +14,7 @@ Autosplitter, layout and splits for speedrunning Metal Gear: Ghost Babel (aka Me
 - Any unwanted occurances of the splitter Starting, Splitting or Resetting
 
 ## Desirables
-- Currently doesn't reset if returning hitting "Exit" after a Game Over
+- Currently doesn't reset if hitting "Exit" after a Game Over, you will need to manually reset before starting a new run
 - VAR views of variables that would affect Rank
 - VAR view of current Rank depending on above variables
 - Other requests from the GB community
