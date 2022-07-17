@@ -3,6 +3,7 @@
 
 state("bgb")
 {
+    int LvlFrames: "bgb.exe", 0x172790, 0x928, 0x4F8;
     byte LvlSec: "bgb.exe", 0x172790, 0x1C0, 0x4F9;
     byte LvlMin: "bgb.exe", 0x172790, 0x928, 0x4FA;
     byte LvlHou: "bgb.exe", 0x172790, 0x4, 0x28, 0x4FB;
@@ -12,11 +13,17 @@ state("bgb")
 
 init {
     vars.TotalIGT = 0;
+    vars.DeleteFrames = 0;
+    vars.UsedFrames = 0;
 }
 
-gameTime {
-    if((current.LvlSec + current.LvlMin + current.LvlHou) > 0)
-        return TimeSpan.FromSeconds(vars.TotalIGT + current.LvlHou * 3600 + current.LvlMin *60 + current.LvlSec);
+gameTime {    
+    if((current.LvlSec + current.LvlMin + current.LvlHou) > 0 && current.LvlFrames > 0)
+        return TimeSpan.FromMilliseconds((vars.TotalIGT * 1000) + (current.LvlMin * 60000) + (vars.UsedFrames/0.256));
+
+    if(current.LvlMin > old.LvlMin) {
+        return false;
+    }
 }
 
 isLoading {
@@ -24,8 +31,16 @@ isLoading {
 }
 
 update {
-    if((old.LvlSec + old.LvlMin + old.LvlHou) > 0 && (current.LvlSec + current.LvlMin + current.LvlHou) == 0)
+    vars.UsedFrames = current.LvlFrames - vars.DeleteFrames;
+
+    if((old.LvlSec + old.LvlMin + old.LvlHou) > 0 && (current.LvlSec + current.LvlMin + current.LvlHou) == 0) {
         vars.TotalIGT = vars.TotalIGT + (old.LvlHou * 3600 + old.LvlMin *60 + old.LvlSec);
+        vars.DeleteFrames = 0;
+    }
+
+    if(current.LvlMin > old.LvlMin) {
+        vars.DeleteFrames = current.LvlFrames;
+    }
 }
 
 start {
