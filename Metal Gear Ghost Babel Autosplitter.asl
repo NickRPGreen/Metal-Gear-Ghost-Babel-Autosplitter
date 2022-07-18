@@ -14,7 +14,7 @@ init {
 
 gameTime {    
     if(vars.FrameCounter > 0) {
-        return TimeSpan.FromMilliseconds(vars.FrameCounter * 17.217);
+        return TimeSpan.FromMilliseconds(vars.FrameCounter * 17.2175);
     }
 }
 
