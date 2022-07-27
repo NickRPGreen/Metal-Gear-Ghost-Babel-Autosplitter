@@ -4,17 +4,18 @@
 state("bgb")
 {
 //24903F9 -> 24908B9
-    byte Map: "bgb.exe", 0x080E14, 0x74D;
-    byte BossHealth: "bgb.exe", 0x080E14, 0x802;
-    int LvlFrames: "bgb.exe", 0x080E14, 0x5F8;
-    byte LvlSec: "bgb.exe", 0x080E14, 0x5F9;
-    byte LvlMin: "bgb.exe", 0x080E14, 0x5FA;
-    byte LvlHou: "bgb.exe", 0x080E14, 0x5FB;
+    byte Map: "bgb.exe",  0x172790, 0x1C0, 0xBC0;
+    byte BossHealth: "bgb.exe", 0x172790, 0x1C0, 0x802;
+    int LvlFrames: "bgb.exe", 0x172790, 0x1C0, 0x4F8;
+    byte LvlSec: "bgb.exe", 0x172790, 0x1C0, 0x4F9;
+    byte LvlMin: "bgb.exe", 0x172790, 0x1C0, 0x4FA;
+    byte LvlHou: "bgb.exe", 0x172790, 0x1C0, 0x4FB;
 }
 
 init {
     vars.FrameCounter = 0;
     vars.TotalIGT = 0;
+    refreshRate = 60;
 }
 
 gameTime {    
