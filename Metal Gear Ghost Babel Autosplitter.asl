@@ -19,7 +19,7 @@ init {
 }
 
 startup{
-    settings.Add("Test", false, "If this setting has appeared, the ASL has updated. It does nothing.");
+    //settings.Add("Test", false, "If this setting has appeared, the ASL has updated. It does nothing.");
 }
 
 gameTime {    
