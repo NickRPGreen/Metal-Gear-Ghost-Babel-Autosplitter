@@ -18,6 +18,10 @@ init {
     refreshRate = 60;
 }
 
+startup{
+    settings.Add("Test", false, "If this setting has appeared, the ASL has updated. It does nothing.");
+}
+
 gameTime {    
     if(vars.FrameCounter > 0) {
         return TimeSpan.FromMilliseconds(vars.TotalIGT + (current.LvlHou * 3600000) + (current.LvlMin *60000) + (current.LvlSec * 1000) + (vars.FrameCounter * 16.94915254237288));
