@@ -1,14 +1,15 @@
 //Metal Gear: Ghost Babel Autosplitter
-//Created by NickRPGreen
+//Created by NickRPGreen 
 
 state("bgb")
 {
-    int LvlFrames: "bgb.exe", 0x172790, 0x928, 0x4F8;
-    byte Map: "bgb.exe", 0x172790, 0x34, 0xC, 0x4C, 0x928, 0xBC0;
-    byte BossHealth: "bgb.exe", 0x172790, 0xB0, 0xC, 0x73C, 0x702;
-    byte LvlSec: "bgb.exe", 0x172790, 0x1C0, 0x4F9;
-    byte LvlMin: "bgb.exe", 0x172790, 0x928, 0x4FA;
-    byte LvlHou: "bgb.exe", 0x172790, 0x4, 0x28, 0x4FB;
+//24903F9 -> 24908B9
+    byte Map: "bgb.exe", 0x080E14, 0x74D;
+    byte BossHealth: "bgb.exe", 0x080E14, 0x802;
+    int LvlFrames: "bgb.exe", 0x080E14, 0x5F8;
+    byte LvlSec: "bgb.exe", 0x080E14, 0x5F9;
+    byte LvlMin: "bgb.exe", 0x080E14, 0x5FA;
+    byte LvlHou: "bgb.exe", 0x080E14, 0x5FB;
 }
 
 init {
