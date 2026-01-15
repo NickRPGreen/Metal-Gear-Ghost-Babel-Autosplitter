@@ -1,15 +1,26 @@
 //Metal Gear: Ghost Babel Autosplitter
 //Created by NickRPGreen 
 
+//64bit version
+state("bgb64")
+{
+    byte Map: "bgb64.exe",  0x3E19A0, 0x8, 0x154, 0xBC0;
+    byte BossHealth: "bgb64.exe", 0x3E19A0, 0x8, 0x154, 0x802;
+    int LvlFrames: "bgb64.exe", 0x3E19A0, 0x8, 0x154, 0x4F8;
+    byte LvlSec: "bgb64.exe", 0x3E19A0, 0x8, 0x154, 0x4F9;
+    byte LvlMin: "bgb64.exe", 0x3E19A0, 0x8, 0x154, 0x4FA;
+    byte LvlHou: "bgb64.exe", 0x3E19A0, 0x8, 0x154, 0x4FB;
+}
+
+//32bit version
 state("bgb")
 {
-//24903F9 -> 24908B9
-    byte Map: "bgb.exe",  0x172790, 0x1C0, 0xBC0;
-    byte BossHealth: "bgb.exe", 0x172790, 0x1C0, 0x802;
-    int LvlFrames: "bgb.exe", 0x172790, 0x1C0, 0x4F8;
-    byte LvlSec: "bgb.exe", 0x172790, 0x1C0, 0x4F9;
-    byte LvlMin: "bgb.exe", 0x172790, 0x1C0, 0x4FA;
-    byte LvlHou: "bgb.exe", 0x172790, 0x1C0, 0x4FB;
+    byte Map: "bgb.exe",  0x1AF860, 0x194, 0x1D0, 0xBC0;
+    byte BossHealth: "bgb.exe", 0x1AF860, 0x194, 0x1D0, 0x802;
+    int LvlFrames: "bgb.exe", 0x1AF860, 0x194, 0x1D0, 0x4F8;
+    byte LvlSec: "bgb.exe", 0x1AF860, 0x194, 0x1D0, 0x4F9;
+    byte LvlMin: "bgb.exe", 0x1AF860, 0x194, 0x1D0, 0x4FA;
+    byte LvlHou: "bgb.exe", 0x1AF860, 0x194, 0x1D0, 0x4FB;
 }
 
 init {
@@ -19,7 +30,7 @@ init {
 }
 
 startup{
-    //settings.Add("Test", false, "If this setting has appeared, the ASL has updated. It does nothing.");
+    settings.Add("Test", false, "If this setting has appeared, the ASL has updated. It does nothing.");
 }
 
 gameTime {    
