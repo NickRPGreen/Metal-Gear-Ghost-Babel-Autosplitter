@@ -1,17 +1,15 @@
 # Metal Gear: Ghost Babel Autosplitter
-Autosplitter, layout and splits for speedrunning Metal Gear: Ghost Babel (aka Metal Gear Solid Gameboy) on emulator
+Autosplitter, layout and splits for speedrunning Metal Gear: Ghost Babel (aka Metal Gear Solid Gameboy) on:
+ - GSE Emulator
+ - Metal Gear Solid Master Collection Volume 2 Bonus Content
 
 ## Current Features
-- Works on bgb.exe for the US, JP and EU versions of the game
-- Starts on New Game selected
+- Works on all language versions (US, JP, EU) versions of the game
+- Starts on taking control of Snake after opening cutscene/codecs
 - Splits on exiting Stage Complete screen
 - Splits on Black Arts Viper 2's health reaching zero (final split)
-- Resets on resetting the emulator
+- Resets on resetting the emulator, or returning to the main menu
 - IGT and RTA are seperated. IGT is the tracked time throughout, whilst RTA is just shown for reference
-
-## Not Yet Tested
-- Any other Gameboy emulators legal for speedrunning (will not work in current format)
-- Any unwanted occurances of the splitter Starting, Splitting or Resetting
 
 ## Desirables
 - Currently doesn't reset if hitting "Exit" after a Game Over, you will need to manually reset before starting a new run
