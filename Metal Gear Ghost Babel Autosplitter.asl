@@ -1,38 +1,151 @@
 // Metal Gear: Ghost Babel Autosplitter
-// Created by NickRPGreen
-// Version 2.0
-// For use exclusively with the GSE Gameboy Emulator: https://github.com/CasualPokePlayer/GSE
+// Created by NickRPGreen 
+
+// For use with Metal Gear Solid Master Collection Volume 2 Bonus Content
+// For use with the GSE Gameboy Emulator: https://github.com/CasualPokePlayer/GSE
 // Requires emu-help-v3 in Components folder to run: https://github.com/Jujstme/emu-help-v3/blob/main/lib%2FLivesplit%2Femu-help-v3
 
-state("LiveSplit") {}
+// v3.0:
+// - Now supports MGS:MC2 version.
+// - Start adjusted to start upon gaining control of Snake, rather than the opening parachute in. 
+//   In MGS:MC2 the memory locations are only assigned to RAM upon the game starting, so this change gives the ASL time to assign the MemoryWatchers before gameplay starts.
+
+state("MGS MC2 Bonus Content") {}
+state("GSE") {}
+
+startup{
+    Assembly.Load(File.ReadAllBytes("Components/emu-help-v3")).CreateInstance("GBC");
+    vars.U = new ExpandoObject();
+    var u = vars.U;          
+    u.Log = (Action<string>)(x => print("MGS:Ghost Babel Autosplitter - " + x.ToString()));
+}
 
 init {
     vars.FrameCounter = 0;
     vars.TotalIGT = 0;
     refreshRate = 60;
+
+    var u = vars.U;
+    u.Log("Running init");
+    u.initComplete = false;
 }
 
-startup{
-    //Creates a persistent instance of the Gameboy class (for Gameboy emulators)
-	Assembly.Load(File.ReadAllBytes("Components/emu-help-v3")).CreateInstance("GBC");
+update {
+    var u = vars.U; 
+    if(!u.initComplete){
+        switch(game.ProcessName.ToLowerInvariant()){
+            case "mgs mc2 bonus content":
+                u.Log("MGS MC2 Bonus Content process found. Scanning for MARK.");
+                var target = new SigScanTarget(0, "03 9C 80 8F 8F 8F 03 9C A0 86 86 86 03 9C C0 8E 8E 8E 03 9C E0 8E 8E 8E 03 9D 00 86 86 86 03 9D 20 8E 8E 8E 03 9D 40 8E 8E 8E 03 9D 60 8E 8E 8E 03 9D 80 8F 8F 8F 03 9D A0 8E 8E 8E 03 9D C0 8E 8E 8E 03 9D E0 8E 8E 8E 03 9E 00 8F 8F 8F 03 9E 20 8F 8F 8F");
+                IntPtr mark = IntPtr.Zero;
 
-    vars.Screen = vars.Helper.Make<byte>(0xC0AA);
-    vars.LvlFrames = vars.Helper.Make<int>(0xC4F8);
-    vars.LvlSec = vars.Helper.Make<byte>(0xC4F9);
-    vars.LvlMin = vars.Helper.Make<byte>(0xC4FA);
-    vars.LvlHou = vars.Helper.Make<byte>(0xC4FB);
-    vars.Result = vars.Helper.Make<byte>(0xC432);
-    vars.Life = vars.Helper.Make<byte>(0xC5E3);
+                foreach (var page in game.MemoryPages()) {
+                    var scanner = new SignatureScanner(game, page.BaseAddress, (int)page.RegionSize);
+                    mark = scanner.Scan(target);
+                    if (mark != IntPtr.Zero) {
+                        break;
+                    }
+                }
+
+                if (mark == IntPtr.Zero) {
+                    return false;
+                }
+
+                u.Log("Mark found at " + mark.ToString("X"));
+                u.statLst = new MemoryWatcherList() {
+                    new MemoryWatcher<byte>    (mark - 0x26E) { Name = "Screen" },
+                    new MemoryWatcher<byte>    (mark + 0x11A) { Name = "Result" },
+                    new MemoryWatcher<int>     (mark + 0x1E0) { Name = "LvlFrames" },
+                    new MemoryWatcher<byte>    (mark + 0x1E1) { Name = "LvlSecs" },
+                    new MemoryWatcher<byte>    (mark + 0x1E2) { Name = "LvlMins" },
+                    new MemoryWatcher<byte>    (mark + 0x1E3) { Name = "LvlHours" },
+                    new MemoryWatcher<byte>    (mark + 0x2CB) { Name = "Life" }
+                };
+
+                u.initComplete = true;
+                u.Log("Memory Watchers compiled. MC2 Autosplitter ready.");
+                break;
+
+            case "gse":
+                u.Log("GSE process found. Scanning for values.");
+                u.Screen = vars.Helper.Make<byte>(0xC0AA);
+                u.LvlFrames = vars.Helper.Make<int>(0xC4F8);
+                u.LvlSecs = vars.Helper.Make<byte>(0xC4F9);
+                u.LvlMins = vars.Helper.Make<byte>(0xC4FA);
+                u.LvlHours = vars.Helper.Make<byte>(0xC4FB);
+                u.Result = vars.Helper.Make<byte>(0xC432);
+                u.Life = vars.Helper.Make<byte>(0xC5E3);
+                u.initComplete = true;
+                u.Log("Variable readers compiled. GSE Autosplitter ready.");
+                break;
+
+            default:
+                break;
+        }
+    }
+
+    if(!u.initComplete){
+        return false;
+    }
+
+    switch(game.ProcessName.ToLowerInvariant()){
+        case "mgs mc2 bonus content":
+            u.statLst.UpdateAll(game);
+            current.Screen = u.statLst["Screen"].Current;
+            current.Result = u.statLst["Result"].Current;
+            current.LvlFrames = u.statLst["LvlFrames"].Current;
+            current.LvlSecs = u.statLst["LvlSecs"].Current;
+            current.LvlMins = u.statLst["LvlMins"].Current;
+            current.LvlHours = u.statLst["LvlHours"].Current;
+            current.Life = u.statLst["Life"].Current;
+
+            old.Screen = u.statLst["Screen"].Old;
+            old.Result = u.statLst["Result"].Old;
+            old.LvlFrames = u.statLst["LvlFrames"].Old;
+            old.LvlSecs = u.statLst["LvlSecs"].Old;
+            old.LvlMins = u.statLst["LvlMins"].Old;
+            old.LvlHours = u.statLst["LvlHours"].Old;
+            old.Life = u.statLst["Life"].Old;
+            break;
+
+        case "gse":
+            current.Screen = u.Screen.Current;
+            current.Result = u.Result.Current;
+            current.LvlFrames = u.LvlFrames.Current;
+            current.LvlSecs = u.LvlSecs.Current;
+            current.LvlMins = u.LvlMins.Current;
+            current.LvlHours = u.LvlHours.Current;
+            current.Life = u.Life.Current;
+
+            old.Screen = u.Screen.Old;
+            old.Result = u.Result.Old;
+            old.LvlFrames = u.LvlFrames.Old;
+            old.LvlSecs = u.LvlSecs.Old;
+            old.LvlMins = u.LvlMins.Old;
+            old.LvlHours = u.LvlHours.Old;
+            old.Life = u.Life.Old;
+            break;
+
+        default:
+            break;
+    }
+
+    if(current.LvlFrames > old.LvlFrames) vars.FrameCounter = vars.FrameCounter + 1;
+    if((current.LvlSecs != old.LvlSecs) && ((current.LvlSecs + current.LvlMins + current.LvlHours) > 0)) vars.FrameCounter = 0;
+    if(old.LvlFrames > 0 && current.LvlFrames == 0) {
+        vars.TotalIGT = vars.TotalIGT + (old.LvlHours * 3600000) + (old.LvlMins * 60000) + (old.LvlSecs * 1000);
+        vars.FrameCounter = 0;
+    }
 }
 
 gameTime {    
-    if(vars.Result.Current == 4){
-        return TimeSpan.FromMilliseconds(vars.TotalIGT + (vars.LvlHou.Current * 3600000) + (vars.LvlMin.Current *60000) + (vars.LvlSec.Current * 1000));
+    if(current.Result == 4) {
+        return TimeSpan.FromMilliseconds(vars.TotalIGT + (current.LvlHours * 3600000) + (current.LvlMins *60000) + (current.LvlSecs * 1000));
     }
     else if(vars.FrameCounter > 0) {
-        return TimeSpan.FromMilliseconds(vars.TotalIGT + (vars.LvlHou.Current * 3600000) + (vars.LvlMin.Current *60000) + (vars.LvlSec.Current * 1000) + (vars.FrameCounter * 16.94915254237288));
+        return TimeSpan.FromMilliseconds(vars.TotalIGT + (current.LvlHours * 3600000) + (current.LvlMins *60000) + (current.LvlSecs * 1000) + (vars.FrameCounter * 16.7427));
     }
-    else if (vars.LvlFrames.Current + vars.TotalIGT == 0) {
+    else if (current.LvlFrames + vars.TotalIGT == 0) {
         return TimeSpan.FromSeconds(0);
     }
 }
@@ -41,27 +154,13 @@ isLoading {
     return true;
 }
 
-update {    
-    current.Screen = vars.Screen.Current;
-    current.Result = vars.Result.Current;
-    current.LvlFrames = vars.LvlFrames.Current;
-    current.Life = vars.Life.Current;
-
-    if(vars.LvlFrames.Current > vars.LvlFrames.Old) vars.FrameCounter = vars.FrameCounter + 1;
-    if((vars.LvlSec.Current != vars.LvlSec.Old) && ((vars.LvlSec.Current + vars.LvlMin.Current + vars.LvlHou.Current) > 0)) vars.FrameCounter = 0;
-    if(vars.LvlFrames.Old > 0 && vars.LvlFrames.Current == 0) {
-        vars.TotalIGT = vars.TotalIGT + (vars.LvlHou.Old * 3600000) + (vars.LvlMin.Old * 60000) + (vars.LvlSec.Old * 1000);
-        vars.FrameCounter = 0;
-    }
-}
-
 start {
-    return vars.Screen.Old == 67 && vars.Screen.Current == 227; 
+    return current.Screen == 227 && current.Result == 0 && current.LvlFrames == 1;
 }
 
 split {
-    if(vars.Screen.Current == 0) return false;
-    return (vars.LvlFrames.Old) > 0 && (vars.LvlFrames.Current) == 0;
+    if(current.Screen == 0) return false;
+    return old.LvlFrames > 0 && current.LvlFrames == 0;
 }
 
 onStart {
@@ -75,13 +174,13 @@ onReset {
 }
 
 reset {
-    if(vars.Screen.Old == 67) {
-        if(vars.Screen.Current == 67 || vars.Screen.Current == 227){
+    if(old.Screen == 67) {
+        if(current.Screen == 67 || current.Screen == 227){
             return false;
         }
         else {
             return true;
         }
     }
-    return vars.Life.Current == 255 && vars.Result.Current == 255;
+    return current.Life == 255 && current.Result == 255;
 }
