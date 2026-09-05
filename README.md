@@ -1,9 +1,7 @@
 # Metal Gear: Ghost Babel Autosplitter
 Autosplitter, layout and splits for speedrunning Metal Gear: Ghost Babel (aka Metal Gear Solid Gameboy) on:
- - GSE Emulator (https://github.com/CasualPokePlayer/GSE)
+ - GSE, BGB (x84 and x64), and Gambatte Gameboy Emulators (does not support the Gambatte core on BizHawk)
  - Metal Gear Solid Master Collection Volume 2 Bonus Content (https://store.steampowered.com/app/3859630/METAL_GEAR_SOLID_MASTER_COLLECTION_Vol2/)
-
-#### Requires emu-help-v3 to be present in LiveSplit/Components folder to run: https://github.com/Jujstme/emu-help-v3/blob/main/lib%2FLivesplit%2Femu-help-v3
 
 ## Current Features
 - Works on all language (US, JP, EU) versions of the game
