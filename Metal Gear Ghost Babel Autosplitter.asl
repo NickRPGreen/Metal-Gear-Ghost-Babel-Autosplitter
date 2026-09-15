@@ -70,7 +70,7 @@ update {
                     u.launcherMark = scanner.Scan(u.LauncherTarget);
                     if (u.launcherMark != IntPtr.Zero) {
                         u.Log("Launcher Header found at " + u.launcherMark.ToString("X"));
-                         = new MemoryWatcher<byte>(u.launcherMark);
+                        u.gameState = new MemoryWatcher<byte>(u.launcherMark);
                         break;
                     }
                 }
@@ -207,7 +207,7 @@ onReset {
 
 reset {
     var u = vars.U;
-    return u.gameState.Current == 2;
+    return (u.isMC2 && u.gameState.Current == 2);
     if(old.Screen == 67) {
         if(current.Screen == 67 || current.Screen == 227){
             return false;
