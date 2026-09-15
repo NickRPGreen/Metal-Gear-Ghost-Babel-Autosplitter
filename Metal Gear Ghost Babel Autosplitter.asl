@@ -4,6 +4,8 @@
 // For use with Metal Gear Solid Master Collection Volume 2 Bonus Content
 // For use with the GSE Gameboy Emulator
 
+// v4.1:
+// - Fixed a bug where the reset block was checking against an often null variable. 
 // v4.0:
 // - Rewritten all memory capture. Previous version's memory capture was extremely poor, resulting in LiveSplit constantly scanning memory until a new game had been started.
 // - Reverted the emulator memory capture back to version 2.0, meaning once again, only GSE is supported and emu-help-v3 is required.
@@ -39,7 +41,7 @@ init {
     u.initComplete = false;
     u.launcherMark = IntPtr.Zero;
     u.currentMark = IntPtr.Zero;
-    u.gameState = null;
+    u.gameState = 0;
 }
 
 update {
@@ -68,7 +70,7 @@ update {
                     u.launcherMark = scanner.Scan(u.LauncherTarget);
                     if (u.launcherMark != IntPtr.Zero) {
                         u.Log("Launcher Header found at " + u.launcherMark.ToString("X"));
-                        u.gameState = new MemoryWatcher<byte>(u.launcherMark);
+                         = new MemoryWatcher<byte>(u.launcherMark);
                         break;
                     }
                 }
